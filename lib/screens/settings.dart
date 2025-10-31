@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:thuchicanhan/core/data_manager.dart';
 
 class SettingsPage extends StatefulWidget {
+  // Nhận danh sách giao dịch hiện tại từ MainScreen
   final List<Transaction> currentTransactions;
-  // Callback để MainScreen cập nhật lại dữ liệu sau khi import
+  // Callback để thông báo cho MainScreen cập nhật lại danh sách gốc
   final Function(List<Transaction>?) onDataImported;
 
   const SettingsPage({
@@ -33,7 +34,6 @@ class _SettingsPageState extends State<SettingsPage> {
   Future<void> _handleExport() async {
     _showSnackbar('Đang mở hộp thoại chọn vị trí...', isError: false);
 
-    // Gọi hàm mới: exportDataToUserChosenLocation
     final result = await DataManager.exportDataToUserChosenLocation(
         widget.currentTransactions);
 
@@ -53,11 +53,9 @@ class _SettingsPageState extends State<SettingsPage> {
   Future<void> _handleImport() async {
     _showSnackbar('Đang mở hộp thoại chọn file...', isError: false);
 
-    // Gọi hàm mới sử dụng file_picker
     final newTransactions = await DataManager.importDataFromUserChosenFile();
 
     if (newTransactions != null) {
-      // Gọi callback để cập nhật danh sách giao dịch ở MainScreen
       widget.onDataImported(newTransactions);
       _showSnackbar('Nhập dữ liệu thành công từ file đã chọn!', isError: false);
     } else {

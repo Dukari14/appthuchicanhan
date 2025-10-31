@@ -167,6 +167,7 @@ Future<void> saveTransactionsToJsonFile(List<Transaction> transactions, String f
   }
 }
 
+// Class dùng cho việc xuất và nạp data
 class DataManager {
   static const String _fileName = 'data.json';
 
@@ -184,14 +185,14 @@ class DataManager {
     return JsonEncoder.withIndent('  ').convert(jsonList);
   }
 
-  // 1. Ghi dữ liệu vào file cục bộ (data.json)
+  // Ghi dữ liệu vào file cục bộ (data.json)
   static Future<File> saveData(List<Transaction> transactions) async {
     final jsonString = _transactionsToJson(transactions);
     final file = await _localFile;
     return file.writeAsString(jsonString);
   }
 
-  // 2. Đọc dữ liệu từ file cục bộ (dùng khi khởi động)
+  // Đọc dữ liệu từ file cục bộ (dùng khi khởi động)
   static Future<List<Transaction>> readData() async {
     try {
       final file = await _localFile;
@@ -207,7 +208,7 @@ class DataManager {
     }
   }
 
-  // HÀM MỚI 1: XUẤT DỮ LIỆU VÀO THƯ MỤC DOWNLOADS (Android Public Storage)
+  // HÀM XUẤT DỮ LIỆU VÀO THƯ MỤC DOWNLOADS (Android Public Storage)
   static Future<String?> exportDataToUserChosenLocation(List<Transaction> transactions) async {
     const String fileName = 'data_exported.json';
     final jsonString = _transactionsToJson(transactions);
@@ -242,7 +243,7 @@ class DataManager {
       }
     }
 
-    // Fallback: Sử dụng file_picker.saveFile() cho iOS, Desktop, hoặc khi Android Downloads thất bại
+    // Fallback: Sử dụng file_picker.saveFile() cho iOS, Desktop
     try {
       final String? outputFile = await FilePicker.platform.saveFile(
         dialogTitle: 'Chọn nơi lưu file data.json',
